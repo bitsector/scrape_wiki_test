@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const randomString = require("./utils/randomString");
-const module2Function = require("./utils/module2");
+const { module2Function, module2Function2 } = require("./utils/module2");
 
 const app = express();
 const PORT = 3000;
@@ -20,6 +20,11 @@ app.get("/generate-string", (req, res) => {
   
 app.get("/module2-endpoint", (req, res) => {
   const message = module2Function();
+  res.json({ message });
+});
+
+app.get("/module2-endpoint2", (req, res) => {
+  const message = module2Function2();
   res.json({ message });
 });
 
