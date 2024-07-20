@@ -22,7 +22,10 @@ async function scrapeWreckDivingSites() {
         console.error("Error fetching the page:", error);
     }
 
-    console.log(links); // Print the list of URLs before returning
+    // Print the entire array of URLs
+    console.dir(links, { maxArrayLength: null });
+    // Print the number of array elements
+    console.log(`Number of links: ${links.length}`);
     return links;
 }
 
