@@ -16,7 +16,8 @@
       try {
         // const response = await fetch("/generate-string");
         // const response = await fetch("/module2-endpoint");
-        const response = await fetch("/module2-endpoint2");
+        // const response = await fetch("/module2-endpoint2");
+        const response = await fetch("/get-scrape-results");
         const data = await response.json();
         document.getElementById("helloBox").value = data.message;
       } catch (error) {

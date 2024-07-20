@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const randomString = require("./utils/randomString");
 const { module2Function, module2Function2 } = require("./utils/module2");
+const { scrapeWreckDivingSites } = require("./utils/scrape");
 
 const app = express();
 const PORT = 3000;
@@ -25,6 +26,11 @@ app.get("/module2-endpoint", (req, res) => {
 
 app.get("/module2-endpoint2", (req, res) => {
   const message = module2Function2();
+  res.json({ message });
+});
+
+app.get("/get-scrape-results", (req, res) => {
+  const message = scrapeWreckDivingSites();
   res.json({ message });
 });
 
