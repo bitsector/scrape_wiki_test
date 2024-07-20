@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const randomString = require("./utils/randomString");
+const module2Function = require("./utils/module2");
 
 const app = express();
 const PORT = 3000;
@@ -17,6 +18,11 @@ app.get("/generate-string", (req, res) => {
     res.json({ message });
   });
   
+app.get("/module2-endpoint", (req, res) => {
+  const message = module2Function();
+  res.json({ message });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
