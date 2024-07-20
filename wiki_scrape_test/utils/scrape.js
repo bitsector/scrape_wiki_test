@@ -26,7 +26,11 @@ async function scrapeWreckDivingSites() {
     console.dir(links, { maxArrayLength: null });
     // Print the number of array elements
     console.log(`Number of links: ${links.length}`);
-    return links;
+
+    // Convert the array to a JSON string
+    const jsonLinks = JSON.stringify(links);
+
+    return jsonLinks;
 }
 
 module.exports = {

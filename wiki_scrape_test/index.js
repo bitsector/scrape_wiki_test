@@ -29,8 +29,8 @@ app.get("/module2-endpoint2", (req, res) => {
   res.json({ message });
 });
 
-app.get("/get-scrape-results", (req, res) => {
-  const message = scrapeWreckDivingSites();
+app.get("/get-scrape-results", async (req, res) => {
+  const message = await scrapeWreckDivingSites();
   res.json({ message });
 });
 
