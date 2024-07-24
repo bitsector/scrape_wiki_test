@@ -43,6 +43,10 @@ async function scrapeWreckDivingSites() {
 async function investigateLink(link) {
     try {
         const { data } = await axios.get(link);
+        
+        // Call the analyzeContents function
+        analyzeContents();
+
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
 
         // Extract the link name from the URL
@@ -54,6 +58,11 @@ async function investigateLink(link) {
     } catch (error) {
         console.error(`Error fetching the page ${link}:`, error);
     }
+}
+
+// Function stub for analyzeContents
+function analyzeContents() {
+    // This function currently does nothing
 }
 
 module.exports = {
