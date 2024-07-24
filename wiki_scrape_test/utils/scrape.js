@@ -32,12 +32,18 @@ async function scrapeWreckDivingSites() {
     // Convert the array to a JSON string
     const jsonLinks = JSON.stringify(links);
 
-    // Investigate each link asynchronously
-    links.forEach(link => {
-        investigateLink(link).then(result => {
-            console.log(`Investigation result for ${link}: ${result}`);
-        });
-    });
+    // Investigate each link asynchronously and aggregate results
+    const investigationPromises = links.map(link => investigateLink(link).then(result => ({ link, ...result })));
+
+    const results = await Promise.all(investigationPromises);
+    const successfulLinks = results.filter(r => r.result).map(r => r.link);
+    const failedLinks = results.filter(r => !r.result).map(r => r.link);
+
+    console.log("Links for which investigateLink() returned true:");
+    console.dir(successfulLinks, { maxArrayLength: null });
+
+    console.log("Links for which investigateLink() returned false:");
+    console.dir(failedLinks, { maxArrayLength: null });
 
     return jsonLinks;
 }
@@ -53,16 +59,16 @@ async function investigateLink(link) {
         const filename = path.join(__dirname, "../bin", `${linkName}_${timestamp}.html`);
 
         // Call the analyzeContents function
-        const result = analyzeContents(data, filename);
-        console.log(`Analysis result for ${filename}: ${result}`);
+        const analysisResult = analyzeContents(data, filename);
+        console.log(`Analysis result for ${filename}: ${analysisResult.result}`);
 
         fs.writeFileSync(filename, data);
         console.log(`Saved HTML content of ${link} to ${filename}`);
 
-        return result;
+        return analysisResult;
     } catch (error) {
         console.error(`Error fetching the page ${link}:`, error);
-        return false;
+        return { result: false, lat: null, lon: null };
     }
 }
 
@@ -71,32 +77,34 @@ function analyzeContents(html, filename) {
     const wgCoordinatesIndex = html.indexOf("wgCoordinates");
     if (wgCoordinatesIndex === -1) {
         console.log(`wgCoordinates not found in the HTML content of ${filename}.`);
-        return false;
+        return { result: false, lat: null, lon: null };
     }
 
     const latIndex = html.indexOf('"lat":', wgCoordinatesIndex);
+    let latitude = null;
     if (latIndex === -1) {
         console.error(`Latitude (lat) not found in the HTML content of ${filename}.`);
-        return false;
+        return { result: false, lat: null, lon: null };
     } else {
         const latStart = latIndex + 6; // Length of '"lat":'
         const latEnd = html.indexOf(",", latStart);
-        const latitude = html.substring(latStart, latEnd).trim();
+        latitude = html.substring(latStart, latEnd).trim();
         console.log(`Latitude in ${filename}: ${latitude}`);
     }
 
     const lonIndex = html.indexOf('"lon":', wgCoordinatesIndex);
+    let longitude = null;
     if (lonIndex === -1) {
         console.error(`Longitude (lon) not found in the HTML content of ${filename}.`);
-        return false;
+        return { result: false, lat: latitude, lon: null };
     } else {
         const lonStart = lonIndex + 6; // Length of '"lon":'
         const lonEnd = html.indexOf("}", lonStart);
-        const longitude = html.substring(lonStart, lonEnd).trim();
+        longitude = html.substring(lonStart, lonEnd).trim();
         console.log(`Longitude in ${filename}: ${longitude}`);
     }
 
-    return true;
+    return { result: true, lat: latitude, lon: longitude };
 }
 
 module.exports = {
