@@ -34,7 +34,9 @@ async function scrapeWreckDivingSites() {
 
     // Investigate each link asynchronously
     links.forEach(link => {
-        investigateLink(link);
+        investigateLink(link).then(result => {
+            console.log(`Investigation result for ${link}: ${result}`);
+        });
     });
 
     return jsonLinks;
@@ -56,8 +58,11 @@ async function investigateLink(link) {
 
         fs.writeFileSync(filename, data);
         console.log(`Saved HTML content of ${link} to ${filename}`);
+
+        return result;
     } catch (error) {
         console.error(`Error fetching the page ${link}:`, error);
+        return false;
     }
 }
 
