@@ -1,8 +1,6 @@
 // utils/scrape.js
 const axios = require("axios");
 const cheerio = require("cheerio");
-const fs = require("fs");
-const path = require("path");
 
 async function scrapeWreckDivingSites() {
     const url = "https://en.wikipedia.org/wiki/List_of_wreck_diving_sites";
@@ -24,14 +22,6 @@ async function scrapeWreckDivingSites() {
         console.error("Error fetching the page:", error);
     }
 
-    // Print the entire array of URLs
-    console.dir(links, { maxArrayLength: null });
-    // Print the number of array elements
-    console.log(`Number of links: ${links.length}`);
-
-    // Convert the array to a JSON string
-    const jsonLinks = JSON.stringify(links);
-
     // Investigate each link asynchronously and aggregate results
     const investigationPromises = links.map(link => investigateLink(link).then(result => ({ link, ...result })));
 
@@ -39,16 +29,17 @@ async function scrapeWreckDivingSites() {
     const successfulLinks = results.filter(r => r.result);
     const failedLinks = results.filter(r => !r.result).map(r => r.link);
 
-    console.log("Links for which investigateLink() returned true:");
-    successfulLinks.forEach(({ link, lat, lon }) => {
-        console.log(`Link: ${link}, Latitude: ${lat}, Longitude: ${lon}`);
-    });
+    // console.log("Links for which investigateLink() returned true:");
+    // successfulLinks.forEach(({ link, lat, lon }) => {
+    //     console.log(`Link: ${link}, Latitude: ${lat}, Longitude: ${lon}`);
+    // });
 
-    console.log("Links for which investigateLink() returned false:");
-    const interestingFailedLinks = failedLinks.filter(isLinkOfInterest);
-    console.dir(interestingFailedLinks, { maxArrayLength: null });
+    // console.log("Links for which investigateLink() returned false:");
+    // const interestingFailedLinks = failedLinks.filter(isLinkOfInterest);
+    // console.dir(interestingFailedLinks, { maxArrayLength: null });
 
-    return jsonLinks;
+    // Return the successfulLinks as a JSON object
+    return JSON.stringify({ successfulLinks });
 }
 
 async function investigateLink(link) {
@@ -63,10 +54,6 @@ async function investigateLink(link) {
         // Call the analyzeContents function
         const analysisResult = analyzeContents(data, linkName);
         console.log(`Analysis result for ${linkName}: ${analysisResult.result}`);
-
-        // const filename = path.join(__dirname, "../bin", `${linkName}_${timestamp}.html`);
-        // fs.writeFileSync(filename, data);
-        // console.log(`Saved HTML content of ${link} to ${filename}`);
 
         return analysisResult;
     } catch (error) {
