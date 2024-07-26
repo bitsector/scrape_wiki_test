@@ -27,8 +27,6 @@ async function scrapeWreckDivingSites() {
 
     const results = await Promise.all(investigationPromises);
     const successfulLinks = results.filter(r => r.result);
-    const failedLinks = results.filter(r => !r.result).map(r => r.link);
-
     // console.log("Links for which investigateLink() returned true:");
     // successfulLinks.forEach(({ link, lat, lon }) => {
     //     console.log(`Link: ${link}, Latitude: ${lat}, Longitude: ${lon}`);
@@ -37,7 +35,8 @@ async function scrapeWreckDivingSites() {
     // console.log("Links for which investigateLink() returned false:");
     // const interestingFailedLinks = failedLinks.filter(isLinkOfInterest);
     // console.dir(interestingFailedLinks, { maxArrayLength: null });
-
+    console.log(jsonSuccessfulLinks);
+    
     // Return the successfulLinks as a JSON object
     return JSON.stringify({ successfulLinks });
 }
@@ -46,15 +45,12 @@ async function investigateLink(link) {
     try {
         const { data } = await axios.get(link);
         
-        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-
         // Extract the link name from the URL
         const linkName = link.split("/").pop();
 
         // Call the analyzeContents function
         const analysisResult = analyzeContents(data, linkName);
         console.log(`Analysis result for ${linkName}: ${analysisResult.result}`);
-
         return analysisResult;
     } catch (error) {
         console.error(`Error fetching the page ${link}:`, error);

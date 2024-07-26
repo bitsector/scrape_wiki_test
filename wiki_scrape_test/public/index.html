@@ -42,17 +42,9 @@
         const response = await fetch("/get-scrape-results");
         const data = await response.json();
         
-        // Store data in a JSON structure
-        const wreckData = {
-          message: data.message,
-          coordinates: data.coordinates // Assuming the response has a coordinates field
-        };
-
-        // Print data to the console
-        console.info("Wreck Data:", wreckData);
-
+        console.info("response: ",response);
         // Display data in the textbox
-        document.getElementById("helloBox").value = JSON.stringify(wreckData, null, 2);
+        document.getElementById("helloBox").value = JSON.stringify(data, null, 2);
       } catch (error) {
         console.error("Error fetching wreck coordinates:", error);
       }
