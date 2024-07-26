@@ -45,7 +45,8 @@ async function scrapeWreckDivingSites() {
     });
 
     console.log("Links for which investigateLink() returned false:");
-    console.dir(failedLinks, { maxArrayLength: null });
+    const interestingFailedLinks = failedLinks.filter(isLinkOfInterest);
+    console.dir(interestingFailedLinks, { maxArrayLength: null });
 
     return jsonLinks;
 }
@@ -107,6 +108,12 @@ function analyzeContents(html, linkname) {
     }
 
     return { result: true, lat: latitude, lon: longitude };
+}
+
+function isLinkOfInterest(link) {
+    const substrings = ["ss", "sms", "hms", "hmas", "uss", "usc"];
+    const lowerCaseLink = link.toLowerCase();
+    return substrings.some(substring => lowerCaseLink.includes(substring));
 }
 
 module.exports = {
