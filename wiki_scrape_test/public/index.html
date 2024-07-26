@@ -5,12 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hello World</title>
   <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      background-color: black;
+    }
+    #earth_div {
+      position: absolute !important;
+      top: 5%;
+      left: 5%;
+      right: 5%;
+      height: 40%; /* Adjusted height to fit margins */
+      margin: auto;
+    }
     #helloBox {
-      width: 100%;
-      height: 50vh; /* 50% of the viewport height */
+      width: 90%; /* 100% - 2*5% margin */
+      height: 40%; /* Adjusted height to fit margins */
       box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+      position: absolute;
+      top: 50%; /* Position below the earth_div with 5% margin */
+      left: 5%;
+      right: 5%;
+      margin: auto;
     }
   </style>
+  <script src="https://www.webglearth.com/v2/api.js"></script>
   <script>
     async function fetchMessage() {
       try {
@@ -25,11 +44,30 @@
       }
     }
 
-    window.onload = fetchMessage;
+    function initializeGlobe() {
+      var earth = new WE.map('earth_div');
+      WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(earth);
+
+      var marker = WE.marker([51.5, -0.09]).addTo(earth);
+      marker.bindPopup("<b>Hello world!</b><br>I am a popup.<br /><span style='font-size:10px;color:#999'>Tip: Another popup is hidden in Cairo..</span>", {maxWidth: 150, closeButton: true}).openPopup();
+
+      var marker2 = WE.marker([30.058056, 31.228889]).addTo(earth);
+      marker2.bindPopup("<b>Cairo</b><br>Yay, you found me!", {maxWidth: 120, closeButton: false});
+
+      var markerCustom = WE.marker([50, -9], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
+
+      earth.setView([51.505, 0], 6);
+    }
+
+    window.onload = function() {
+      fetchMessage();
+      initializeGlobe();
+    };
   </script>
 </head>
-<body>
+<body onload="initializeGlobe()">
   <h1>Hello World</h1>
+  <div id="earth_div"></div>
   <input type="text" id="helloBox" value="Hello World" readonly>
 </body>
 </html>
