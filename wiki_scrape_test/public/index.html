@@ -32,7 +32,10 @@
   <script src="https://www.webglearth.com/v2/api.js"></script>
   <script>
     async function fetchMessage() {
+      console.info("Starting fetchMessage()");
+
       try {
+        document.getElementById("helloBox").value = "loading...";
         // const response = await fetch("/generate-string");
         // const response = await fetch("/module2-endpoint");
         // const response = await fetch("/module2-endpoint2");
@@ -42,9 +45,13 @@
       } catch (error) {
         console.error("Error fetching message:", error);
       }
+
+      console.info("Done fetchMessage()");
     }
 
     function initializeGlobe() {
+      console.info("Starting initializeGlobe()");
+
       var earth = new WE.map('earth_div');
       WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(earth);
 
@@ -57,15 +64,18 @@
       var markerCustom = WE.marker([50, -9], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
 
       earth.setView([51.505, 0], 6);
+
+      console.info("Done initializeGlobe()");
     }
 
     window.onload = function() {
+      console.info("Window onload event triggered");
       fetchMessage();
       initializeGlobe();
     };
   </script>
 </head>
-<body onload="initializeGlobe()">
+<body>
   <h1>Hello World</h1>
   <div id="earth_div"></div>
   <input type="text" id="helloBox" value="Hello World" readonly>
