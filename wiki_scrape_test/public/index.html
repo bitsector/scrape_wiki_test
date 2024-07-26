@@ -31,8 +31,8 @@
   </style>
   <script src="https://www.webglearth.com/v2/api.js"></script>
   <script>
-    async function fetchMessage() {
-      console.info("Starting fetchMessage()");
+    async function fetchWreckCoordinates() {
+      console.info("Starting fetchWreckCoordinates()");
 
       try {
         document.getElementById("helloBox").value = "loading...";
@@ -41,12 +41,23 @@
         // const response = await fetch("/module2-endpoint2");
         const response = await fetch("/get-scrape-results");
         const data = await response.json();
-        document.getElementById("helloBox").value = data.message;
+        
+        // Store data in a JSON structure
+        const wreckData = {
+          message: data.message,
+          coordinates: data.coordinates // Assuming the response has a coordinates field
+        };
+
+        // Print data to the console
+        console.info("Wreck Data:", wreckData);
+
+        // Display data in the textbox
+        document.getElementById("helloBox").value = JSON.stringify(wreckData, null, 2);
       } catch (error) {
-        console.error("Error fetching message:", error);
+        console.error("Error fetching wreck coordinates:", error);
       }
 
-      console.info("Done fetchMessage()");
+      console.info("Done fetchWreckCoordinates()");
     }
 
     function initializeGlobe() {
@@ -68,9 +79,9 @@
       console.info("Done initializeGlobe()");
     }
 
-    window.onload = function() {
+    window.onload = async function() {
       console.info("Window onload event triggered");
-      fetchMessage();
+      await fetchWreckCoordinates();
       initializeGlobe();
     };
   </script>
