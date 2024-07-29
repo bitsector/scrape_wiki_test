@@ -26,15 +26,7 @@ async function scrapeWreckDivingSites() {
     const investigationPromises = links.map(link => investigateLink(link).then(result => ({ link, ...result })));
 
     const results = await Promise.all(investigationPromises);
-    const successfulLinks = results.filter(r => r.result);
-    // console.log("Links for which investigateLink() returned true:");
-    // successfulLinks.forEach(({ link, lat, lon }) => {
-    //     console.log(`Link: ${link}, Latitude: ${lat}, Longitude: ${lon}`);
-    // });
-
-    // console.log("Links for which investigateLink() returned false:");
-    // const interestingFailedLinks = failedLinks.filter(isLinkOfInterest);
-    // console.dir(interestingFailedLinks, { maxArrayLength: null });
+    const successfulLinks = results.filter(r => r.result).map(r => ({ ...r, additional_data: "" }));
     console.log(successfulLinks);
     
     // Return the successfulLinks as a JSON object
