@@ -35,7 +35,7 @@ async function scrapeWreckDivingSites() {
     // console.log("Links for which investigateLink() returned false:");
     // const interestingFailedLinks = failedLinks.filter(isLinkOfInterest);
     // console.dir(interestingFailedLinks, { maxArrayLength: null });
-    console.log(jsonSuccessfulLinks);
+    console.log(successfulLinks);
     
     // Return the successfulLinks as a JSON object
     return JSON.stringify({ successfulLinks });
