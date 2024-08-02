@@ -18,7 +18,7 @@
       height: 40%; /* Adjusted height to fit margins */
       margin: auto;
     }
-    #helloBox {
+    #debug_text_box {
       width: 90%; /* 100% - 2*5% margin */
       height: 40%; /* Adjusted height to fit margins */
       box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
@@ -27,6 +27,7 @@
       left: 5%;
       right: 5%;
       margin: auto;
+      resize: none; /* Prevents resizing */
     }
   </style>
   <script src="https://www.webglearth.com/v2/api.js"></script>
@@ -35,16 +36,12 @@
       console.info("Starting fetchWreckCoordinates()");
 
       try {
-        document.getElementById("helloBox").value = "loading...";
-        // const response = await fetch("/generate-string");
-        // const response = await fetch("/module2-endpoint");
-        // const response = await fetch("/module2-endpoint2");
+        document.getElementById("debug_text_box").value = "loading...";
         const response = await fetch("/get-scrape-results");
         const data = await response.json();
         
-        console.info("response: ",response);
-        // Display data in the textbox
-        document.getElementById("helloBox").value = JSON.stringify(data, null, 2);
+        console.info("response: ", response);
+        return data;
       } catch (error) {
         console.error("Error fetching wreck coordinates:", error);
       }
@@ -71,9 +68,16 @@
       console.info("Done initializeGlobe()");
     }
 
+    function printCoordinates(data) {
+      const message = JSON.parse(data.message).message;
+      const textBox = document.getElementById("debug_text_box");
+      textBox.value = message.map(item => `Link: ${item.link}, Lat: ${item.lat}, Lon: ${item.lon}`).join('\n');
+    }
+
     window.onload = async function() {
       console.info("Window onload event triggered");
-      await fetchWreckCoordinates();
+      const data = await fetchWreckCoordinates();
+      printCoordinates(data);
       initializeGlobe();
     };
   </script>
@@ -81,6 +85,6 @@
 <body>
   <h1>Hello World</h1>
   <div id="earth_div"></div>
-  <input type="text" id="helloBox" value="Hello World" readonly>
+  <textarea id="debug_text_box" readonly>Hello World</textarea>
 </body>
 </html>
