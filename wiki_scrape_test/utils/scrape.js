@@ -29,8 +29,8 @@ async function scrapeWreckDivingSites() {
     const successfulLinks = results.filter(r => r.result).map(r => ({ ...r, additional_data: "" }));
     console.log(successfulLinks);
     
-    // Return the successfulLinks as a JSON object
-    return JSON.stringify({ successfulLinks });
+    // Return the successfulLinks as a JSON object within the "message" key
+    return JSON.stringify({ message: successfulLinks });
 }
 
 async function investigateLink(link) {
