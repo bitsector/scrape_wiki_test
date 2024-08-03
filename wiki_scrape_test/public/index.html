@@ -69,8 +69,10 @@
       // New markers from fetched data
       const message = JSON.parse(data.message);
       message.forEach(item => {
+        const linkName = item.link.split('/').pop(); // Extract the name part of the link
+        const popupContent = `<a href="${item.link}" target="_blank">${linkName}</a>`;
         const marker = WE.marker([item.lat, item.lon]).addTo(earth);
-        marker.bindPopup(`<b>Link:</b> ${item.link}<br><b>Additional Data:</b> ${item.additional_data}`, {maxWidth: 150, closeButton: true});
+        marker.bindPopup(popupContent, {maxWidth: 150, closeButton: true});
       });
 
       earth.setView([51.505, 0], 6);
@@ -81,7 +83,7 @@
     function printCoordinates(data) {
       const message = JSON.parse(data.message);
       const textBox = document.getElementById("debug_text_box");
-      textBox.value = message.map(item => `Link: ${item.link}, Lat: ${item.lat}, Lon: ${item.lon}, Additional Data: ${item.additional_data}`).join('\n');
+      textBox.value = message.map(item => `Link: ${item.link}, Lat: ${item.lat}, Lon: ${item.lon}`).join('\n');
     }
 
     window.onload = async function() {
