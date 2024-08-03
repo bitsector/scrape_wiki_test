@@ -1,7 +1,5 @@
 const express = require("express");
 const path = require("path");
-const randomString = require("./utils/randomString");
-const { module2Function, module2Function2 } = require("./utils/module2");
 const { scrapeWreckDivingSites } = require("./utils/scrape");
 
 const app = express();
