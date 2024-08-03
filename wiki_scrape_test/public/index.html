@@ -68,16 +68,16 @@
       console.info("Done initializeGlobe()");
     }
 
-    function printCoordinates(data) {
-        const textBox = document.getElementById("debug_text_box");
-        textBox.value = JSON.stringify(data, null, 2);
-    }
-    
     // function printCoordinates(data) {
-    //   const message = JSON.parse(data.message).message;
-    //   const textBox = document.getElementById("debug_text_box");
-    //   textBox.value = message.map(item => `Link: ${item.link}, Lat: ${item.lat}, Lon: ${item.lon}, Additional Data: ${item.additional_data}`).join('\n');
+    //     const textBox = document.getElementById("debug_text_box");
+    //     textBox.value = JSON.stringify(data, null, 2);
     // }
+    
+    function printCoordinates(data) {
+      const message = JSON.parse(data.message);
+      const textBox = document.getElementById("debug_text_box");
+      textBox.value = message.map(item => `Link: ${item.link}, Lat: ${item.lat}, Lon: ${item.lon}, Additional Data: ${item.additional_data}`).join('\n');
+    }
 
     window.onload = async function() {
       console.info("Window onload event triggered");
