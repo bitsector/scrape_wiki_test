@@ -49,12 +49,14 @@
       console.info("Done fetchWreckCoordinates()");
     }
 
-    function initializeGlobe() {
+    function initializeGlobe(data) {
       console.info("Starting initializeGlobe()");
 
       var earth = new WE.map('earth_div');
       WE.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(earth);
 
+      // Previous markers for comparison
+      /*
       var marker = WE.marker([51.5, -0.09]).addTo(earth);
       marker.bindPopup("<b>Hello world!</b><br>I am a popup.<br /><span style='font-size:10px;color:#999'>Tip: Another popup is hidden in Cairo..</span>", {maxWidth: 150, closeButton: true}).openPopup();
 
@@ -62,17 +64,20 @@
       marker2.bindPopup("<b>Cairo</b><br>Yay, you found me!", {maxWidth: 120, closeButton: false});
 
       var markerCustom = WE.marker([50, -9], '/img/logo-webglearth-white-100.png', 100, 24).addTo(earth);
+      */
+
+      // New markers from fetched data
+      const message = JSON.parse(data.message);
+      message.forEach(item => {
+        const marker = WE.marker([item.lat, item.lon]).addTo(earth);
+        marker.bindPopup(`<b>Link:</b> ${item.link}<br><b>Additional Data:</b> ${item.additional_data}`, {maxWidth: 150, closeButton: true});
+      });
 
       earth.setView([51.505, 0], 6);
 
       console.info("Done initializeGlobe()");
     }
 
-    // function printCoordinates(data) {
-    //     const textBox = document.getElementById("debug_text_box");
-    //     textBox.value = JSON.stringify(data, null, 2);
-    // }
-    
     function printCoordinates(data) {
       const message = JSON.parse(data.message);
       const textBox = document.getElementById("debug_text_box");
@@ -83,7 +88,7 @@
       console.info("Window onload event triggered");
       const data = await fetchWreckCoordinates();
       printCoordinates(data);
-      initializeGlobe();
+      initializeGlobe(data);
     };
   </script>
 </head>
