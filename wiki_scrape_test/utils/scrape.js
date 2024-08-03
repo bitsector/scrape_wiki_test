@@ -30,7 +30,7 @@ async function scrapeWreckDivingSites() {
     console.log(successfulLinks);
     
     // Return the successfulLinks as a JSON object within the "message" key
-    return JSON.stringify({ message: successfulLinks });
+    return JSON.stringify(successfulLinks );
 }
 
 async function investigateLink(link) {
@@ -42,10 +42,10 @@ async function investigateLink(link) {
 
         // Call the analyzeContents function
         const analysisResult = analyzeContents(data, linkName);
-        console.log(`Analysis result for ${linkName}: ${analysisResult.result}`);
+        // console.log(`Analysis result for ${linkName}: ${analysisResult.result}`);
         return analysisResult;
     } catch (error) {
-        console.error(`Error fetching the page ${link}:`, error);
+        // console.error(`Error fetching the page ${link}:`, error);
         return { result: false, lat: null, lon: null };
     }
 }
